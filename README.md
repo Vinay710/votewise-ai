@@ -81,10 +81,8 @@ npm install
 ```
 
 ### 2. Environment Variables
-Copy the example environment file and add your Gemini API key:
-```bash
-cp .env.example .env.local
-```
+Create a `.env.local` file in the root directory and add your secrets.
+
 Inside `.env.local`:
 ```env
 NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
