@@ -1,26 +1,172 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ─── Tailwind v4: Enable class-based dark mode ──────────────── */
+@variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  /* Primary palette (blue) */
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-200: #BFDBFE;
+  --color-primary-300: #93C5FD;
+  --color-primary-400: #60A5FA;
+  --color-primary-500: #3B82F6;
+  --color-primary-600: #2563EB;
+  --color-primary-700: #1D4ED8;
+  --color-primary-800: #1E40AF;
+  --color-primary-900: #1E3A8A;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Accent palette (green) */
+  --color-accent-50: #F0FDF4;
+  --color-accent-100: #DCFCE7;
+  --color-accent-200: #BBF7D0;
+  --color-accent-300: #86EFAC;
+  --color-accent-400: #4ADE80;
+  --color-accent-500: #22C55E;
+  --color-accent-600: #16A34A;
+  --color-accent-700: #15803D;
+  --color-accent-800: #166534;
+  --color-accent-900: #14532D;
+
+  /* Fonts */
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  /* Box shadows */
+  --shadow-card: 0 4px 24px -4px rgba(37, 99, 235, 0.12);
+  --shadow-card-hover: 0 8px 40px -8px rgba(37, 99, 235, 0.25);
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Toast variables ─────────────────────────────────────────── */
+:root {
+  --toast-bg: #ffffff;
+  --toast-color: #111827;
+  --page-bg-light: #f9fafb;
+  --page-bg-dark: #0f172a;
 }
+.dark {
+  --toast-bg: #1e293b;
+  --toast-color: #f1f5f9;
+}
+
+/* ─── Base ────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background-color: #f9fafb;
+  color: #111827;
+}
+html.dark {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+body {
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: inherit;
+  color: inherit;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 100px; }
+.dark ::-webkit-scrollbar-thumb { background: #334155; }
+
+/* ─── Selection ────────────────────────────────────────────────── */
+::selection { background: rgba(59, 130, 246, 0.25); }
+
+/* ─── Theme-aware page sections ────────────────────────────────── */
+/* Apply dark background to all page content that doesn't have its own bg */
+.page-section {
+  background-color: #f9fafb;
+  color: #111827;
+}
+html.dark .page-section {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+.page-section-white {
+  background-color: #ffffff;
+  color: #111827;
+}
+html.dark .page-section-white {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+/* ─── Utilities ─────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #1D4ED8 0%, #16A34A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 40%, #1a6b3a 100%) !important;
+  color: #ffffff !important;
+}
+
+/* Force white text on hero sections regardless of light/dark mode */
+.hero-gradient .text-white,
+.hero-gradient [class*="text-white"] {
+  color: #ffffff !important;
+}
+
+.hero-gradient .text-white\/90,
+.hero-gradient [class*="text-white/90"] {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.hero-gradient .text-white\/70,
+.hero-gradient [class*="text-white/70"] {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.hero-gradient .text-white\/60,
+.hero-gradient [class*="text-white/60"] {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.hero-gradient .text-white\/50,
+.hero-gradient [class*="text-white/50"] {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.hero-gradient .text-white\/80,
+.hero-gradient [class*="text-white/80"] {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.pattern-dots {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.shadow-card { box-shadow: var(--shadow-card); }
+.shadow-card-hover { box-shadow: var(--shadow-card-hover); }

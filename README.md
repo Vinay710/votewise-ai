@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VoteWise AI 🗳️
 
-## Getting Started
+> **AI-Powered Election Awareness Assistant** — Understand elections in minutes!
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8?logo=tailwindcss)](https://tailwindcss.com)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-latest-purple)](https://framer.com/motion)
+
+---
+
+## 🎯 About
+
+VoteWise AI is a production-ready web application that helps first-time voters, citizens, students, and senior citizens understand the election process through an AI-powered chat interface.
+
+**Key highlights:**
+- 🤖 AI-powered chat with election knowledge (mock Gemini API, plug in your key)
+- 🗓️ Visual election timeline with all 7 phases explained
+- 🧙 Step-by-step wizard for first-time voters
+- 🌐 Multilingual: English, Hindi, Kannada
+- 🌙 Dark mode support
+- 📱 Fully responsive design
+
+---
+
+## 🚀 Quick Start
 
 ```bash
+cd votewise-ai
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔑 Environment Variables
 
-## Learn More
+```env
+NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-To learn more about Next.js, take a look at the following resources:
+Get your key at [Google AI Studio](https://aistudio.google.com/app/apikey).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> The app ships with a **mock AI** that works without a real API key.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📁 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/
+│   ├── layout.tsx           # Root layout
+│   ├── page.tsx             # Home page (/)
+│   ├── chat/page.tsx        # Chat page (/chat)
+│   ├── timeline/page.tsx    # Timeline (/timeline)
+│   └── first-voter/page.tsx # First Voter Wizard (/first-voter)
+├── components/
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── ChatBox.tsx
+│   ├── SidebarMenu.tsx
+│   ├── FeatureCard.tsx
+│   ├── TimelineCard.tsx
+│   ├── StateSelector.tsx
+│   └── LoadingSpinner.tsx
+├── hooks/useLanguage.tsx
+└── lib/
+    ├── gemini.ts
+    └── translations.ts
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🌐 Connecting Real Gemini AI
+
+In `src/lib/gemini.ts`, replace the mock:
+
+```typescript
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+export async function generateElectionResponse(message: string): Promise<string> {
+  const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const result = await model.generateContent([SYSTEM_PROMPT, message]);
+  return result.response.text();
+}
+```
+
+```bash
+npm install @google/generative-ai
+```
+
+---
+
+## 🏗️ Build for Production
+
+```bash
+npm run build && npm start
+```
+
+---
+
+⚖️ **Disclaimer:** VoteWise AI is neutral and does not endorse any political party or candidate.
+
+Built with ❤️ for democracy 🇮🇳
