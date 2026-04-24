@@ -34,6 +34,8 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: t("home") },
     { href: "/chat", label: t("chat") },
+    { href: "/fake-news", label: t("fakeNews") },
+    { href: "/candidates", label: t("candidates") },
     { href: "/timeline", label: t("timeline") },
     { href: "/first-voter", label: t("firstVoter") },
   ];

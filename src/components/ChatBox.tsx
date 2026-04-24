@@ -2,11 +2,19 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Trash2, Sparkles } from "lucide-react";
+import { Send, Bot, User, Trash2, Sparkles, Mic } from "lucide-react";
 import toast from "react-hot-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { generateElectionResponse } from "@/lib/gemini";
+import { generateElectionResponse } from "@/app/actions";
 import { useLanguage } from "@/hooks/useLanguage";
+
+// Add SpeechRecognition type definitions
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
 
 export interface Message {
   id: string;
@@ -47,8 +55,10 @@ export default function ChatBox({ initialPrompt }: ChatBoxProps) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTopic, setActiveTopic] = useState<string>("");
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   const scrollToBottom = () =>
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,6 +66,52 @@ export default function ChatBox({ initialPrompt }: ChatBoxProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = lang === "hi" ? "hi-IN" : lang === "kn" ? "kn-IN" : "en-IN";
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInput((prev) => prev + (prev ? " " : "") + transcript);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error("Speech recognition error", event.error);
+        setIsListening(false);
+        toast.error("Speech recognition failed. Please try again.");
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, [lang]);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      toast.error("Speech recognition not supported in your browser.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+        toast.success("Listening...");
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   useEffect(() => {
     if (initialPrompt && initialPrompt !== activeTopic) {
@@ -252,6 +308,18 @@ export default function ChatBox({ initialPrompt }: ChatBoxProps) {
             className="flex-1 resize-none bg-transparent text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 outline-none max-h-32 py-1.5"
             disabled={loading}
           />
+          <button
+            onClick={toggleListening}
+            className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all shadow-md ${
+              isListening
+                ? "bg-red-500 text-white animate-pulse"
+                : "bg-gray-200 dark:bg-slate-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-slate-500"
+            }`}
+            title="Voice input"
+            type="button"
+          >
+            <Mic className="w-4 h-4" />
+          </button>
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || loading}

@@ -23,44 +23,37 @@ import { useLanguage } from "@/hooks/useLanguage";
 const FEATURES = [
   {
     icon: MessageCircle,
-    title: "AI-Powered Q&A",
+    title: "AI & Voice Assistant",
     description:
-      "Get instant answers to your election questions in simple, clear language. No jargon, just clarity.",
+      "Get instant answers via text or voice. Multilingual support built-in.",
     color: "primary",
   },
   {
-    icon: Clock,
-    title: "Election Timeline",
+    icon: Shield,
+    title: "Fake News Detector",
     description:
-      "Understand every phase of an election — from notification to result announcement.",
+      "Paste any suspicious forward or claim and let AI verify its authenticity.",
     color: "accent",
+  },
+  {
+    icon: Users,
+    title: "Candidate Compare",
+    description:
+      "Compare politicians neutrally with factual AI analysis.",
+    color: "teal",
   },
   {
     icon: CheckCircle2,
     title: "Voter Checklist",
     description:
       "Personalized checklist based on your age, state, and voter ID status.",
-    color: "purple",
-  },
-  {
-    icon: Shield,
-    title: "Politically Neutral",
-    description:
-      "VoteWise AI never endorses any party or candidate. Pure, unbiased election education.",
-    color: "teal",
-  },
-  {
-    icon: Globe2,
-    title: "Multilingual",
-    description:
-      "Available in English, Hindi, and Kannada — reach every citizen in their language.",
     color: "orange",
   },
   {
-    icon: BookOpen,
-    title: "Easy to Understand",
+    icon: Clock,
+    title: "Election Timeline",
     description:
-      "Complex election rules explained in bullet points and simple words for everyone.",
+      "Understand every phase of an election — from notification to results.",
     color: "pink",
   },
 ];
