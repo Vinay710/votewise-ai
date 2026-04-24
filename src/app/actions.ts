@@ -28,8 +28,9 @@ export async function generateElectionResponse(
       const prompt = `Please respond in this language: ${lang}\n\nUser Question: ${message}`;
       const result = await model.generateContent(prompt);
       return result.response.text();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini API error:", error);
+      return "I'm sorry, the AI service is currently unavailable. Please try again in a few moments.";
     }
   }
 
@@ -47,14 +48,15 @@ export async function detectFakeNews(
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
+        model: "gemini-1.5-flash",
         systemInstruction: "You are a Fake News Detector for elections. Analyze the provided news, claim, or WhatsApp forward. Determine if it is likely True, likely False, or Misleading based on general knowledge of Indian elections. Provide a brief explanation. Keep it politically neutral.",
       });
       const prompt = `Please respond in this language: ${lang}\n\nAnalyze this claim:\n${content}`;
       const result = await model.generateContent(prompt);
       return result.response.text();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini API error:", error);
+      return "I'm sorry, the AI service is currently unavailable. Please try again in a few moments.";
     }
   }
 
@@ -71,14 +73,15 @@ export async function compareCandidates(
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
+        model: "gemini-1.5-flash",
         systemInstruction: "You are an AI that provides publicly available, neutral comparison between political figures or parties. Provide factual background, key policies, and general focus areas. Never take sides or endorse anyone. If the figures are not recognizable, state that.",
       });
       const prompt = `Please respond in this language: ${lang}\n\nCompare these candidates or parties:\n${candidates}`;
       const result = await model.generateContent(prompt);
       return result.response.text();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini API error:", error);
+      return "I'm sorry, the AI service is currently unavailable. Please try again in a few moments.";
     }
   }
 
